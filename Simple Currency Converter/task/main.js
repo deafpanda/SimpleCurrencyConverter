@@ -15,33 +15,46 @@ function Currency(country, value) {
         let result = (Number(quantity) * Number(this.value)).toFixed(4);
         console.log(`Result: ${quantity} USD equals ${result} ${this.country}`);
     };
+
+    this.baseConversion = function(base, quantity) {
+        let baseCurrency = currencies[base];
+        let result = (Number(quantity) * Number(this.value)/Number(baseCurrency)).toFixed(4);
+        console.log(`Result: ${quantity} ${base} equals ${result} ${this.country}`);
+    };
+}
+
+function getCurrencyName(prompt) {
+    let name = input(`${prompt}: >`).toUpperCase();
+    if (currencies[name] === undefined) {
+        console.log("Unknown currency");
+        return false;
+    } else {
+        return name;
+    }
 }
 
 console.log("Welcome to Currency Converter!");
-
 for (let item in currencies){
     let x = new Currency(currencies[item], item);
     x.usdEquivalence();
 }
 
-console.log("I can convert USD to these currencies: JPY, EUR, RUB, USD, GBP");
-// console.log(`I can convert USD to these currencies: ${Object.keys(currencies).join(", ")}`)
-console.log("Type the currency you wish to convert: USD")
-// let baseCurrency = input("From: >").toUpperCase();
-let targetCurrency = input("To: >").toUpperCase();
-if (currencies[targetCurrency] === undefined){
-    console.log("Unknown currency");
-}
-else {
-    let amount = input("Amount: >");
-    if (isNaN(amount)) {
-        console.log("The amount has to be a number")
-    } else {
-        if (Number(amount) < 1) {
-            console.log("The amount cannot be less than 1")
+console.log("What do you want to convert?")
+let baseCurrency = getCurrencyName('From');
+if (baseCurrency) {
+    let targetCurrency = getCurrencyName('To');
+    if (targetCurrency) {
+        let amount = input("Amount: >");
+        if (isNaN(amount)) {
+            console.log("The amount has to be a number")
         } else {
-            const tc = new Currency(targetCurrency, currencies[targetCurrency]);
-            tc.usdConversion(amount);
+            if (Number(amount) < 1) {
+                console.log("The amount cannot be less than 1")
+            } else {
+                const tc = new Currency(targetCurrency, currencies[targetCurrency]);
+                // tc.usdConversion(amount);
+                tc.baseConversion(baseCurrency, amount)
+            }
         }
     }
 }
