@@ -39,22 +39,41 @@ for (let item in currencies){
     x.usdEquivalence();
 }
 
-console.log("What do you want to convert?")
-let baseCurrency = getCurrencyName('From');
-if (baseCurrency) {
-    let targetCurrency = getCurrencyName('To');
-    if (targetCurrency) {
-        let amount = input("Amount: >");
-        if (isNaN(amount)) {
-            console.log("The amount has to be a number")
-        } else {
-            if (Number(amount) < 1) {
-                console.log("The amount cannot be less than 1")
+const main = function() {
+    console.log("What do you want to convert?")
+    let baseCurrency = getCurrencyName('From');
+    if (baseCurrency) {
+        let targetCurrency = getCurrencyName('To');
+        if (targetCurrency) {
+            let amount = input("Amount: >");
+            if (isNaN(amount)) {
+                console.log("The amount has to be a number")
             } else {
-                const tc = new Currency(targetCurrency, currencies[targetCurrency]);
-                // tc.usdConversion(amount);
-                tc.baseConversion(baseCurrency, amount)
+                if (Number(amount) < 1) {
+                    console.log("The amount cannot be less than 1")
+                } else {
+                    const tc = new Currency(targetCurrency, currencies[targetCurrency]);
+                    // tc.usdConversion(amount);
+                    tc.baseConversion(baseCurrency, amount)
+                }
             }
         }
     }
 }
+
+let response = '';
+do{
+    console.log("What do you want to do?\n1-Convert currencies 2-Exit program");
+    let response = input();
+    switch (response) {
+        case "1":
+            main();
+            break;
+        case "2":
+            console.log("Have a nice day!");
+            return;
+        default:
+            console.log("Unknown input");
+    }
+}while (response !== '2')
+
